@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caleb Miguel Flores</title>
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Caleb Miguel Flores — architecture and design. Selected works.">
+<style>
+  :root{
+    --ink:#ececea; --mute:#8f8f8d; --line:#333335; --bg:#1c1c1e; --panel:#262628;
+    --f:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    --pad:clamp(16px,2.2vw,32px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:var(--f);font-size:13px;line-height:1.45;color:var(--ink);background:var(--bg);
+       -webkit-font-smoothing:antialiased;letter-spacing:.005em}
+  a{color:inherit;text-decoration:none}
+  img{display:block;width:100%;height:auto;background:var(--panel)}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+
+  /* header */
+  header{position:fixed;inset:0 0 auto 0;z-index:20;display:grid;grid-template-columns:1fr 1fr 1fr;
+         align-items:baseline;padding:var(--pad);background:rgba(28,28,30,.92);
+         backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  .brand{font-weight:500}
+  .brand span{color:var(--mute);font-weight:400}
+  nav{display:flex;gap:22px;justify-content:flex-end;grid-column:3}
+  nav a{color:var(--mute);transition:color .15s}
+  nav a:hover,nav a.on{color:var(--ink)}
+  .crumb{color:var(--mute)}
+  main{padding:calc(var(--pad)*2 + 40px) var(--pad) var(--pad)}
+  .view{display:none}
+  .view.on{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+
+  /* index toolbar */
+  .bar{display:flex;justify-content:space-between;align-items:baseline;
+       padding-bottom:14px;margin-bottom:var(--pad);border-bottom:1px solid var(--line)}
+  .bar .count{color:var(--mute)}
+  .toggle{display:flex;gap:16px}
+  .toggle button{color:var(--mute)}
+  .toggle button.on{color:var(--ink)}
+
+  /* grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:56px var(--pad)}
+  .card .ph{aspect-ratio:4/3;overflow:hidden;background:var(--panel)}
+  .card img{height:100%;object-fit:cover;filter:grayscale(1);
+            transition:transform .8s cubic-bezier(.2,.7,.2,1),filter .5s ease,opacity .3s}
+  .card:hover img,.card:focus-visible img{transform:scale(1.025);filter:grayscale(0)}
+  @media (hover:none){.card img{filter:none}}
+  .card .cap{display:grid;grid-template-columns:34px 1fr;margin-top:10px}
+  .card .cap .n{color:var(--mute)}
+  .card .cap .s{color:var(--mute);grid-column:2}
+
+  /* list */
+  .list{display:none}
+  .list.on{display:block}
+  .grid.off{display:none}
+  .row{display:grid;grid-template-columns:48px 2.2fr 2fr 2fr 1fr;gap:var(--pad);
+       padding:11px 0;border-bottom:1px solid var(--line);transition:color .15s}
+  .row.h{color:var(--mute);border-bottom-color:var(--ink);padding-top:0}
+  .list:hover .row:not(.h){color:var(--mute)}
+  .list .row:not(.h):hover{color:var(--ink)}
+  .peek{position:fixed;width:280px;pointer-events:none;z-index:30;opacity:0;transition:opacity .15s}
+  .peek.on{opacity:1}
+
+  /* project */
+  .p-head{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--pad);margin-bottom:var(--pad)}
+  .p-head h1{font-size:13px;font-weight:500}
+  .p-head h1 .n{color:var(--mute);font-weight:400;margin-right:14px}
+  .hero{margin:0 calc(var(--pad)*-1);}
+  .hero img{max-height:86vh;object-fit:cover}
+  .p-body{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--pad);margin:var(--pad) 0 calc(var(--pad)*3)}
+  dl{display:grid;grid-template-columns:96px 1fr;row-gap:3px;align-self:start}
+  dt{color:var(--mute)}
+  .text{grid-column:2 / span 2;max-width:62ch}
+  .text p{margin-bottom:1em;font-size:15px;line-height:1.5}
+  .text p.lede{font-size:19px;line-height:1.35;margin-bottom:1.2em}
+  .sec{display:grid;grid-template-columns:1fr 2fr;gap:var(--pad);padding-top:12px;margin-top:calc(var(--pad)*3);
+       border-top:1px solid var(--ink)}
+  .sec h3{font-size:13px;font-weight:400}
+  .sec h3 span{color:var(--mute);margin-left:10px}
+  .sec .hint{color:var(--mute)}
+  .gal{display:grid;grid-template-columns:1fr 1fr;gap:48px var(--pad);margin-top:var(--pad)}
+  .gal figure{cursor:zoom-in}
+  .gal .box{aspect-ratio:4/3;overflow:hidden;background:var(--panel)}
+  .gal .box img{width:100%;height:100%;object-fit:cover;background:none;transition:opacity .3s}
+  .gal.dw .box{background:#fff;padding:0 5%}
+  .gal.dw .solo .box{background:#fff}
+  .gal.dw .box img{object-fit:contain;mix-blend-mode:multiply}
+  .gal .wide{grid-column:1 / -1}
+  .gal .wide .box{aspect-ratio:auto}
+  .gal .wide .box img{height:auto}
+  .gal .solo .box{aspect-ratio:2/1;background:var(--panel);padding:2.5%}
+  .gal .solo .box img{height:100%;object-fit:contain}
+  .gal figure:hover img{opacity:.88}
+  .gal figcaption{display:grid;grid-template-columns:34px 1fr;color:var(--mute);margin-top:8px}
+  .subs{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--pad);margin-top:1.6em;padding-top:1.2em;border-top:1px solid var(--line)}
+  .subs h4{font-size:13px;font-weight:500;margin-bottom:4px}
+  .subs h4 span{display:block;color:var(--mute);font-weight:400}
+  .subs p{font-size:13px;line-height:1.45;margin:0}
+  .lb{position:fixed;inset:0;z-index:50;background:var(--bg);display:none;
+      grid-template-rows:auto 1fr auto;padding:var(--pad)}
+  .lb.on{display:grid}
+  .lb-top{display:flex;justify-content:space-between;color:var(--mute)}
+  .lb-top button:hover,.lb-nav button:hover{color:var(--ink)}
+  .lb-img{display:flex;align-items:center;justify-content:center;min-height:0;padding:var(--pad) 0}
+  .lb-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;background:none}
+  .lb-nav{display:flex;justify-content:space-between;color:var(--mute)}
+  .lb-nav button{color:var(--mute)}
+  .pager{display:grid;grid-template-columns:1fr 1fr;margin-top:calc(var(--pad)*4);
+         padding-top:14px;border-top:1px solid var(--ink)}
+  .pager a:last-child{text-align:right}
+  .pager small{display:block;color:var(--mute);font-size:13px}
+
+  /* about */
+  .about{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--pad)}
+  .about .big{grid-column:1 / span 2;font-size:clamp(22px,2.6vw,34px);line-height:1.2;font-weight:400;
+              letter-spacing:-.01em;max-width:24em}
+  .about h2{font-size:13px;font-weight:400;color:var(--mute);margin-bottom:8px}
+  .about section{margin-top:calc(var(--pad)*3)}
+  .about li a{text-decoration:underline;text-underline-offset:2px}
+  .about ul{list-style:none}
+  .about li{display:grid;grid-template-columns:96px 1fr;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
+  .about li span:first-child{color:var(--mute)}
+  .note{color:var(--mute)}
+
+  footer{display:flex;justify-content:space-between;color:var(--mute);
+         padding:calc(var(--pad)*3) var(--pad) var(--pad)}
+
+  @media (max-width:900px){
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .row{grid-template-columns:36px 2fr 1.4fr 1fr}
+    .row .c{display:none}
+    .p-head,.p-body,.about{grid-template-columns:1fr}
+    .text,.about .big{grid-column:auto}
+    .sec,.subs{grid-template-columns:1fr}
+    header{grid-template-columns:1fr auto}
+    nav{grid-column:2}
+    .crumb{display:none}
+  }
+  @media (max-width:560px){
+    .grid{grid-template-columns:1fr;gap:40px}
+    .row{grid-template-columns:30px 1fr auto}
+    .row .t{display:none}
+    .gal{grid-template-columns:1fr;gap:32px}
+    .peek{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="#projects">Caleb Miguel Flores <span>&nbsp;Architecture &amp; Design</span></a>
+  <span id="crumb" hidden></span>
+  <nav>
+    <a href="#projects" data-nav="projects">Projects</a>
+    <a href="#about" data-nav="about">About</a>
+  </nav>
+</header>
+
+<main>
+  <div class="view" id="v-projects">
+    <div class="bar">
+      <span class="count">Selected Works, 2024–2026</span>
+      <div class="toggle">
+        <button data-mode="grid" class="on">Grid</button>
+        <button data-mode="list">List</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="list" id="list"></div>
+  </div>
+
+  <div class="view" id="v-project"></div>
+
+  <div class="view" id="v-about">
+    <div class="about">
+      <p class="big">Caleb Miguel Flores is an architecture student at the University of California, Berkeley. His work moves between buildings, pavilions and installations, using memory, material and light as the starting point for form.</p>
+      <div></div>
+    </div>
+    <div class="about">
+      <section>
+        <h2>Education</h2>
+        <ul>
+          <li><span>2026–2028</span><span>B.A. Architecture, University of California, Berkeley (expected Spring 2028)</span></li>
+          <li><span>2024–2026</span><span>A.A. Architecture and Humanities, Pasadena City College — Summa Cum Laude, Dean’s List</span></li>
+        </ul>
+      </section>
+      <section>
+        <h2>Exhibitions &amp; Activities</h2>
+        <ul>
+          <li><span>2026</span><span>PLAT|FORM Community College Exhibition, Woodbury University School of Architecture, hosted at Gensler Los Angeles — presented <a href="#in-memory" style="text-decoration:underline">In Memory</a></span></li>
+          <li><span>2024–2026</span><span>Architecture Club, Pasadena City College</span></li>
+        </ul>
+      </section>
+      <section>
+        <h2>Contact</h2>
+        <ul>
+          <li><span>Email</span><a href="mailto:calebmiguel39@gmail.com">calebmiguel39@gmail.com</a></li>
+          <li><span>Based in</span><span>Pasadena / Berkeley, CA</span></li>
+        </ul>
+      </section>
+    </div>
+    <div class="about">
+      <section>
+        <h2>Coursework</h2>
+        <ul>
+          <li><span>UC Berkeley</span><span>ARCH 100A Fundamentals of Architectural Design</span></li>
+          <li><span>UC Berkeley</span><span>ARCH 130 Intro to Architectural Design Theory and Criticism</span></li>
+          <li><span>Fall 2025</span><span>ARCH 020B Architectural Design — Gregory Zamora</span></li>
+          <li><span>Spring 2025</span><span>ARCH 020A Architectural Design — Gregory Zamora</span></li>
+          <li><span>Spring 2025</span><span>ARCH 014 Materials &amp; Construction — Mark Ng</span></li>
+          <li><span>Fall 2024</span><span>ARCH 010B Design Fundamentals — Benjamin Warwas</span></li>
+          <li><span>Spring 2024</span><span>ARCH 010A Design Fundamentals — Benjamin Warwas</span></li>
+          <li><span>Spring 2024</span><span>ARCH 012A Visual Communications I — Ashley Gordon</span></li>
+        </ul>
+      </section>
+      <section>
+        <h2>Skills</h2>
+        <ul>
+          <li><span>Modeling</span><span>Rhino, Grasshopper, AutoCAD, SketchUp</span></li>
+          <li><span>Rendering</span><span>D5 Render, Lumion, Enscape</span></li>
+          <li><span>Graphics</span><span>Photoshop, Illustrator, InDesign, Lightroom</span></li>
+          <li><span>Making</span><span>Physical modeling, hand drawing, wood joinery</span></li>
+        </ul>
+      </section>
+      <section>
+        <h2>Languages</h2>
+        <ul>
+          <li><span></span><span>English, Spanish, Tagalog</span></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer><span>© 2026 Caleb Miguel Flores</span><a href="#projects" onclick="window.scrollTo(0,0)">Top</a></footer>
+<img class="peek" id="peek" alt="">
+<div class="lb" id="lb"><div class="lb-top"><span id="lb-c"></span><button id="lb-x">Close</button></div>
+<div class="lb-img"><img id="lb-i" alt=""></div>
+<div class="lb-nav"><button id="lb-p">Previous</button><span id="lb-n"></span><button id="lb-nx">Next</button></div></div>
+
+<script>
+const P = [
+ { id:'room-in-room', n:'01', title:'Room in Room', type:'Student lounge',
+   place:'Bauer Wurster Hall, UC Berkeley', year:'2026', term:'Fall 2026',
+   course:'ARCH 100A Fundamentals of Architectural Design', school:'UC Berkeley', inst:'Manthripragada', team:'Individual',
+   hero:'00-hero', lede:'A 2,000-square-foot student lounge in the east courtyard of Bauer Wurster Hall, made of two rooms — one nested inside the other.',
+   text:[
+    'The lounge attaches to one of the hall’s east entry doors and opens onto the courtyard. Within its single volume it holds a study and lounge area, a café, restrooms, storage, mechanical space and bike storage reached from outside.',
+    'The design began from two images, each translated into a precise line drawing: one set the strategy for the plan, the other the formal ideas for the section. A diagonal cut runs through both rooms, organizing the plan and slicing the roof.',
+    'Walls are treated only as solid. Every door, window and skylight is a subtraction from that mass, letting light into the outer room through windows and into the inner room from above.'],
+   images:[['00-model-aerial','Model, aerial view'],['00-model-top','Model, plan view'],['00-model-entry','Model, courtyard entry'],['00-model-detail','Model, opening detail']],
+   drawings:[['00-site','Site plan'],['00-plan','Floor plan'],['00-short','Short section'],['00-long','Long section']]},
+ { id:'in-memory', n:'02', title:'In Memory', type:'Multi-site resilience network',
+   place:'Pasadena & Altadena, California', year:'2025', term:'Fall 2025',
+   course:'ARCH 020B Architectural Design', inst:'Gregory Zamora', team:'Individual', shown:'PLAT|FORM 2026, Gensler Los Angeles',
+   hero:'01-hero', lede:'A three-building resilience network for Pasadena and Altadena — a community center, an emergency response center, and a housing and small-business incubator — designed in response to the Eaton Fire.',
+   text:[
+    'The project’s conceptual focus is memory. Site research revealed a recurring theme of loss across all three sites: events of destruction that leave traces on the urban fabric, much like the formation of memory. That formation was articulated in three stages — catalyst, the event that initiates memory; memory, what remains afterward; and clarity, the insight gained through reflection.',
+    'The stages set the spatial qualities of the program: catalyst spaces are solid, memory spaces are flexible, and clarity spaces are semi-flexible. Layers of concrete, glass and polycarbonate shift throughout each building, producing varying degrees of transparency and opacity that tie the concept directly to the material.',
+    'The network recognizes past devastation while preparing communities for a more resilient future. Catalyst spaces anchor and ground, memory spaces adapt and transform, and clarity spaces help communities grow and rebuild.'],
+   subs:[
+     ['Main Site','Community Center, Old Town Pasadena','The anchor of the network addresses a history of streets widened at the cost of historic façades. Circulation carries occupants vertically through catalyst, memory and clarity.'],
+     ['Satellite A','Emergency Response Center, Pasadena','Beside the 210 freeway, the building can be crossed without obstruction from parking lot to street, bridging communities divided by an urban scar.'],
+     ['Satellite B','Housing & Small Business Incubator, Altadena','In Farnsworth Park, memory and clarity spaces sit on the ground floor, leaving room for rebuilding, reinterpretation and regrowth after the fire.']],
+   images:[['01-interior','Main Site, interior'],['01-sata','Satellite A, exterior'],['01-sata-corridor','Satellite A, passage'],
+     ['01-satb-interior','Satellite B, interior'],['01-satb','Satellite B, exterior'],['01-collage','Site research collage']],
+   drawings:[['01-map','Network map'],['01-altadena','Altadena, remaining and destroyed structures'],['01-siteplan','Main Site, site plan'],
+     ['01-iso','Main Site, isometric view'],['01-plans','Main Site, floor plans 1 and 3'],['01-axon','Main Site, exploded axonometric'],
+     ['01-section','Main Site, section A'],['01-sata-plans','Satellite A, floor plans 1 and 2'],['01-satb-plans','Satellite B, floor plans 1 and 2']]},
+ { id:'vapor-water-ice', n:'03', title:'Vapor Water Ice', type:'Mixed-use housing and commercial',
+   place:'Pasadena, California', year:'2025', term:'Spring 2025',
+   course:'ARCH 020A Architectural Design', inst:'Gregory Zamora', team:'Team',
+   hero:'02-hero', lede:'A mixed-use residential and commercial building in Pasadena that answers the threat of urban fire by taking water as its conceptual basis.',
+   text:[
+    'The three states of water — vapor, water and ice — organize circulation, program, materiality and experience. The form is cut along directional lines aligned with key points in the city, tying the building to its surroundings.',
+    'In the commercial level, bifold doors blur interior and exterior while ribbed glass gives the sense of moving through vapor or steam; it is the building’s point of connection with the city.'],
+   images:[['02-commercial','Commercial space'],['02-community','Community room'],['02-apartments','Apartments, exterior'],
+     ['02-model','Physical model, 1/16" = 1\'-0"']],
+   drawings:[['02-site','Site plan'],['02-process','Formal process — carve, shift, cut, offset'],['02-plans','Floor plans -1 and 0'],
+     ['02-circulation','Exploded axonometric, circulation'],['02-sectional','Sectional diagram — mist, water, ice'],
+     ['02-materials','Program and materials'],['02-section','Section 1']]},
+ { id:'take-pavilion', n:'04', title:'Take', type:'Prefabricated pavilion',
+   place:'—', year:'2025', term:'Spring 2025',
+   course:'ARCH 014 Materials and Construction', inst:'Mark Ng', team:'Individual + Team',
+   hero:'03-hero', lede:'A cantilevered pavilion built from only two adjacent walls and a roof — a tranquil space for introspection that can be prefabricated, transported and disassembled.',
+   text:[
+    'The concept comes from Japanese bamboo forests. Working with wood, paper, canvas, clear acrylic and straw mesh, the pavilion diffuses light and layers shadow to make a space of rest and mindfulness.',
+    'Early iterations translated the gradient of light through bamboo into a structure of three opacities — void, paper and wood panel. A façade of timber strips later emulated the density of bamboo stalks, while a canvas and acrylic roof stood in for the porosity of foliage.',
+    'The final version is eight modules — six wall panels and two roof panels — that slot together through joints and grooves for quick assembly and removal.'],
+   images:[['03-final','Final iteration, 3" = 1\'-0" (team portion)'],['03-it1','Iteration 1, 1/4" = 1\'-0"'],
+     ['03-it2','Iteration 2, 1/4" = 1\'-0"'],['03-it3','Iteration 3, 3" = 1\'-0" section model'],['03-it4','Iteration 4, 1/2" = 1\'-0" section model']],
+   drawings:[]},
+ { id:'church-in-light', n:'05', title:'Church in Light', type:'Church',
+   place:'—', year:'2024', term:'Spring 2024',
+   course:'ARCH 010A Design Fundamentals', inst:'Benjamin Warwas', team:'Individual',
+   hero:'04-hero', lede:'A church that subverts the nave, narthex and sanctuary, built from a collage of three everyday objects: a pear, a roll of tape and a cup.',
+   text:[
+    'The pear becomes the nave, a void within the solid mass. The cup becomes the sanctuary and its courtyard, enclosing the nave and admitting natural light. The tape becomes the narthex — a ramp wrapping the whole building for a slow, contemplative approach before service.',
+    'By working the transitions between spaces through light and darkness, the church becomes a place for contemplation and introspection.'],
+   images:[['04-int1','Interior'],['04-int2','Courtyard'],['04-model','Physical model, 1/16" = 1\'-0"']],
+   drawings:[['04-objects','Pear, tape, cup — nave, narthex, sanctuary'],['04-axon','Exploded axonometric'],['04-plan','Floor plan'],['04-section','Short section']]},
+ { id:'faux-liage', n:'06', title:'Faux-liage', type:'Public installation',
+   place:'—', year:'2024', term:'Spring 2024',
+   course:'ARCH 012A Visual Communications I', inst:'Ashley Gordon', team:'Individual',
+   hero:'05-hero', lede:'A public installation drawn from the way people move through and under foliage — to walk through, look through, sit beneath, and watch light and shadow.',
+   text:[
+    'The structure aggregates small modular units that stack and pack together. Vertical and horizontal openings are placed to allow free movement and airflow, and to open sightlines through the pavilion at every scale.'],
+   images:[['05-collage','Approach']],
+   drawings:[['05-zoning','Zoning — through, above, below'],['05-layers','Operative layers'],['05-plan','Floor plan'],['05-elev','Elevations and sections']]},
+ { id:'readymade-residences', n:'07', title:'Readymade Residences', type:'Small-lot housing',
+   place:'Silver Lake, Los Angeles', year:'2024', term:'Fall 2024',
+   course:'ARCH 010B Design Fundamentals', inst:'Benjamin Warwas', team:'Individual',
+   hero:'06-hero', lede:'Small-lot housing based on the bungalow court — two ADUs and a duplex of two single-family dwellings — that looks familiar outside and reveals its complexity within.',
+   text:[
+    'Two precedents frame the project: Adolf Loos’ Raumplan and Marcel Duchamp’s Readymades. Following Duchamp’s act of selecting the ordinary and placing it in an artistic context, the project adopts the Mission Revival style — an icon of Los Angeles bungalow courts — as its exterior.',
+    'Inside, the Raumplan’s level changes and varied ceiling heights create a complex spatial interior, setting up a deliberate tension between façade and organization.'],
+   images:[['06-model1','Model, 1/8" = 1\'-0"'],['06-model2','Model detail']],
+   drawings:[['06-axon','Private vs. public'],['06-site','Site plan (floor plan 1), Berkeley Ave'],['06-perspsection','Perspective section'],
+     ['06-sections','ADU and duplex, short sections and floor plans 2']]}
+];
+
+const $=s=>document.querySelector(s);
+const WIDE=['00-long','01-section','02-section','02-sectional','04-section','05-elev','06-site','06-sections'];
+const src=k=>'img/'+k+'.jpg';
+const fig=(k,c,cls='')=>`<figure class="plate ${cls}"><img loading="lazy" src="${src(k)}" alt="${c||''}">${c?`<figcaption>${c}</figcaption>`:''}</figure>`;
+
+// index
+$('#grid').innerHTML=P.map(p=>`
+  <a class="card" href="#${p.id}">
+    <div class="ph"><img loading="lazy" src="${src(p.hero)}" alt="${p.title}"></div>
+    <div class="cap"><span class="n">${p.n}</span><span>${p.title}</span>
+    <span class="s">${p.type}${p.place!=='—'?', '+p.place:''}, ${p.year}</span></div>
+  </a>`).join('');
+$('#list').innerHTML=`<div class="row h"><span>No.</span><span>Project</span><span class="t">Type</span><span class="c">Course</span><span>Year</span></div>`+
+  P.map(p=>`<a class="row" href="#${p.id}" data-img="${p.hero}"><span>${p.n}</span><span>${p.title}</span><span class="t">${p.type}</span><span class="c">${p.course}</span><span>${p.year}</span></a>`).join('');
+
+document.querySelectorAll('.toggle button').forEach(b=>b.onclick=()=>{
+  const list=b.dataset.mode==='list';
+  document.querySelectorAll('.toggle button').forEach(x=>x.classList.toggle('on',x===b));
+  $('#grid').classList.toggle('off',list); $('#list').classList.toggle('on',list);
+  try{localStorage.setItem('cmf-mode',b.dataset.mode)}catch(e){}
+});
+try{ if(localStorage.getItem('cmf-mode')==='list') document.querySelector('[data-mode=list]').click(); }catch(e){}
+
+// hover preview in list view
+const peek=$('#peek');
+$('#list').addEventListener('mousemove',e=>{
+  const r=e.target.closest('.row[data-img]');
+  if(!r){peek.classList.remove('on');return}
+  const s=src(r.dataset.img); if(!peek.src.endsWith(s)) peek.src=s;
+  peek.style.left=Math.min(e.clientX+24,innerWidth-300)+'px';
+  peek.style.top=Math.min(e.clientY+16,innerHeight-230)+'px';
+  peek.classList.add('on');
+});
+$('#list').addEventListener('mouseleave',()=>peek.classList.remove('on'));
+
+function project(p){
+  const i=P.indexOf(p), prev=P[(i+P.length-1)%P.length], next=P[(i+1)%P.length];
+  let fn=0;
+  const gal=(list,dw)=>{
+    const nw=list.filter(([k])=>!WIDE.includes(k)), w=list.filter(([k])=>WIDE.includes(k));
+    const solo=nw.length%2?nw[nw.length-1][0]:null;
+    return [...nw,...w].map(([k,c])=>{fn++;return `<figure class="${WIDE.includes(k)?'wide':k===solo?'wide solo':''}" data-k="${k}" data-c="${c}">
+     <div class="box"><img loading="lazy" src="${src(k)}" alt="${c}"></div><figcaption><span>${String(fn).padStart(2,'0')}</span><span>${c}</span></figcaption></figure>`}).join('')};
+  const sec=(name,list,dw)=>list.length?`<div class="sec"><h3>${name}<span>${list.length}</span></h3><span class="hint">Click to enlarge</span></div>
+     <div class="gal ${dw?'dw':''}">${gal(list,dw)}</div>`:'';
+  const subs=p.subs?`<div class="subs">${p.subs.map(([t,u,d])=>`<div><h4>${t}<span>${u}</span></h4><p>${d}</p></div>`).join('')}</div>`:'';
+  return `
+   <div class="p-head"><h1><span class="n">${p.n}</span>${p.title}</h1><span class="crumb">${p.type}</span><span></span></div>
+   <div class="hero"><img src="${src(p.hero)}" alt="${p.title}"></div>
+   <div class="p-body">
+     <dl>
+       <dt>Type</dt><dd>${p.type}</dd>
+       ${p.place!=='—'?`<dt>Location</dt><dd>${p.place}</dd>`:''}
+       <dt>Term</dt><dd>${p.term}</dd>
+       <dt>Course</dt><dd>${p.course}<br>${p.school||'Pasadena City College'}</dd>
+       <dt>Instructor</dt><dd>${p.inst}</dd>
+       <dt>Work</dt><dd>${p.team}</dd>
+       ${p.shown?`<dt>Exhibited</dt><dd>${p.shown}</dd>`:''}
+     </dl>
+     <div class="text"><p class="lede">${p.lede}</p>${p.text.map(t=>`<p>${t}</p>`).join('')}${subs}</div>
+   </div>
+   ${sec('Images',p.images)}${sec('Drawings',p.drawings,true)}
+   <div class="pager">
+     <a href="#${prev.id}"><small>Previous</small>${prev.n} ${prev.title}</a>
+     <a href="#${next.id}"><small>Next</small>${next.n} ${next.title}</a>
+   </div>`;
+}
+
+function route(){
+  const h=location.hash.slice(1)||'projects';
+  const p=P.find(x=>x.id===h);
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  let key=h;
+  if(p){ $('#v-project').innerHTML=project(p); $('#v-project').classList.add('on'); key='projects';
+         $('#crumb').textContent=p.n+' '+p.title; document.title=p.title+' — Caleb Miguel Flores'; }
+  else if(h==='about'){ $('#v-about').classList.add('on'); $('#crumb').textContent='About'; document.title='About — Caleb Miguel Flores'; }
+  else { $('#v-projects').classList.add('on'); key='projects'; $('#crumb').textContent=''; document.title='Caleb Miguel Flores'; }
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.nav===key));
+  peek.classList.remove('on');
+  window.scrollTo(0,0);
+}
+let LB=[],li=0;
+function show(i){li=(i+LB.length)%LB.length;const f=LB[li];$('#lb-i').src=src(f.dataset.k);$('#lb-c').textContent=f.dataset.c;
+  $('#lb-n').textContent=(li+1)+' / '+LB.length;$('#lb').classList.add('on')}
+const closeLb=()=>$('#lb').classList.remove('on');
+$('#v-project').addEventListener('click',e=>{const f=e.target.closest('.gal figure');if(!f)return;
+  LB=[...document.querySelectorAll('#v-project .gal figure')];show(LB.indexOf(f))});
+$('#lb-x').onclick=closeLb;$('#lb-p').onclick=()=>show(li-1);$('#lb-nx').onclick=()=>show(li+1);
+$('#lb').addEventListener('click',e=>{if(e.target.id==='lb'||e.target.classList.contains('lb-img'))closeLb()});
+addEventListener('keydown',e=>{if(!$('#lb').classList.contains('on'))return;
+  if(e.key==='Escape')closeLb();if(e.key==='ArrowLeft')show(li-1);if(e.key==='ArrowRight')show(li+1)});
+addEventListener('hashchange',()=>{closeLb();route()}); route();
+</script>
+</body>
+</html>
