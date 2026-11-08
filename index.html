@@ -4,11 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Caleb Miguel Flores</title>
-<meta name="color-scheme" content="dark">
 <meta name="description" content="Caleb Miguel Flores — architecture and design. Selected works.">
 <style>
   :root{
-    --ink:#ececea; --mute:#8f8f8d; --line:#333335; --bg:#1c1c1e; --panel:#262628;
+    --ink:#111; --mute:#8a8a8a; --line:#e6e6e6; --bg:#fff; --panel:#f4f4f4;
     --f:"Helvetica Neue", Helvetica, Arial, sans-serif;
     --pad:clamp(16px,2.2vw,32px);
   }
@@ -22,7 +21,7 @@
 
   /* header */
   header{position:fixed;inset:0 0 auto 0;z-index:20;display:grid;grid-template-columns:1fr 1fr 1fr;
-         align-items:baseline;padding:var(--pad);background:rgba(28,28,30,.92);
+         align-items:baseline;padding:var(--pad);background:rgba(255,255,255,.94);
          backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
   .brand{font-weight:500}
   .brand span{color:var(--mute);font-weight:400}
@@ -295,24 +294,7 @@ const P = [
    images:[['03-final','Final iteration, 3" = 1\'-0" (team portion)'],['03-it1','Iteration 1, 1/4" = 1\'-0"'],
      ['03-it2','Iteration 2, 1/4" = 1\'-0"'],['03-it3','Iteration 3, 3" = 1\'-0" section model'],['03-it4','Iteration 4, 1/2" = 1\'-0" section model']],
    drawings:[]},
- { id:'church-in-light', n:'05', title:'Church in Light', type:'Church',
-   place:'—', year:'2024', term:'Spring 2024',
-   course:'ARCH 010A Design Fundamentals', inst:'Benjamin Warwas', team:'Individual',
-   hero:'04-hero', lede:'A church that subverts the nave, narthex and sanctuary, built from a collage of three everyday objects: a pear, a roll of tape and a cup.',
-   text:[
-    'The pear becomes the nave, a void within the solid mass. The cup becomes the sanctuary and its courtyard, enclosing the nave and admitting natural light. The tape becomes the narthex — a ramp wrapping the whole building for a slow, contemplative approach before service.',
-    'By working the transitions between spaces through light and darkness, the church becomes a place for contemplation and introspection.'],
-   images:[['04-int1','Interior'],['04-int2','Courtyard'],['04-model','Physical model, 1/16" = 1\'-0"']],
-   drawings:[['04-objects','Pear, tape, cup — nave, narthex, sanctuary'],['04-axon','Exploded axonometric'],['04-plan','Floor plan'],['04-section','Short section']]},
- { id:'faux-liage', n:'06', title:'Faux-liage', type:'Public installation',
-   place:'—', year:'2024', term:'Spring 2024',
-   course:'ARCH 012A Visual Communications I', inst:'Ashley Gordon', team:'Individual',
-   hero:'05-hero', lede:'A public installation drawn from the way people move through and under foliage — to walk through, look through, sit beneath, and watch light and shadow.',
-   text:[
-    'The structure aggregates small modular units that stack and pack together. Vertical and horizontal openings are placed to allow free movement and airflow, and to open sightlines through the pavilion at every scale.'],
-   images:[['05-collage','Approach']],
-   drawings:[['05-zoning','Zoning — through, above, below'],['05-layers','Operative layers'],['05-plan','Floor plan'],['05-elev','Elevations and sections']]},
- { id:'readymade-residences', n:'07', title:'Readymade Residences', type:'Small-lot housing',
+ { id:'readymade-residences', n:'05', title:'Readymade Residences', type:'Small-lot housing',
    place:'Silver Lake, Los Angeles', year:'2024', term:'Fall 2024',
    course:'ARCH 010B Design Fundamentals', inst:'Benjamin Warwas', team:'Individual',
    hero:'06-hero', lede:'Small-lot housing based on the bungalow court — two ADUs and a duplex of two single-family dwellings — that looks familiar outside and reveals its complexity within.',
@@ -321,7 +303,24 @@ const P = [
     'Inside, the Raumplan’s level changes and varied ceiling heights create a complex spatial interior, setting up a deliberate tension between façade and organization.'],
    images:[['06-model1','Model, 1/8" = 1\'-0"'],['06-model2','Model detail']],
    drawings:[['06-axon','Private vs. public'],['06-site','Site plan (floor plan 1), Berkeley Ave'],['06-perspsection','Perspective section'],
-     ['06-sections','ADU and duplex, short sections and floor plans 2']]}
+     ['06-sections','ADU and duplex, short sections and floor plans 2']]},
+ { id:'church-in-light', n:'06', title:'Church in Light', type:'Church',
+   place:'—', year:'2024', term:'Spring 2024',
+   course:'ARCH 010A Design Fundamentals', inst:'Benjamin Warwas', team:'Individual',
+   hero:'04-hero', lede:'A church that subverts the nave, narthex and sanctuary, built from a collage of three everyday objects: a pear, a roll of tape and a cup.',
+   text:[
+    'The pear becomes the nave, a void within the solid mass. The cup becomes the sanctuary and its courtyard, enclosing the nave and admitting natural light. The tape becomes the narthex — a ramp wrapping the whole building for a slow, contemplative approach before service.',
+    'By working the transitions between spaces through light and darkness, the church becomes a place for contemplation and introspection.'],
+   images:[['04-int1','Interior'],['04-int2','Courtyard'],['04-model','Physical model, 1/16" = 1\'-0"']],
+   drawings:[['04-objects','Pear, tape, cup — nave, narthex, sanctuary'],['04-axon','Exploded axonometric'],['04-plan','Floor plan'],['04-section','Short section']]},
+ { id:'faux-liage', n:'07', title:'Faux-liage', type:'Public installation',
+   place:'—', year:'2024', term:'Spring 2024',
+   course:'ARCH 012A Visual Communications I', inst:'Ashley Gordon', team:'Individual',
+   hero:'05-hero', lede:'A public installation drawn from the way people move through and under foliage — to walk through, look through, sit beneath, and watch light and shadow.',
+   text:[
+    'The structure aggregates small modular units that stack and pack together. Vertical and horizontal openings are placed to allow free movement and airflow, and to open sightlines through the pavilion at every scale.'],
+   images:[['05-collage','Approach']],
+   drawings:[['05-zoning','Zoning — through, above, below'],['05-layers','Operative layers'],['05-plan','Floor plan'],['05-elev','Elevations and sections']]},
 ];
 
 const $=s=>document.querySelector(s);
